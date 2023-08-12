@@ -21,7 +21,7 @@
             padding: 0 0px;
         }
 
-        .background {
+        .noise {
             position: fixed;
             z-index: 0;
             top: 0;
@@ -33,7 +33,7 @@
             background-repeat: repeat;
         }
 
-        .qs2 {
+        .colour-grad {
             position: fixed;
             z-index: -1;
             top: 0;
@@ -49,8 +49,8 @@
 </head>
 
 <body class="body">
-    <div class="background"></div>
-    <div class="qs2"></div>
+    <div class="noise"></div>
+    <div class="colour-grad"></div>
 
     <div class="grid-container">
         <div class="grid-cell main-cell" style="box-shadow: 10px 0px 100px rgba(255, 255, 255, 0.3);">
@@ -134,7 +134,5 @@
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
     </script>
-
-</body>
-
+  </body>
 </html>
