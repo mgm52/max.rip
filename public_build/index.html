@@ -1,40 +1,41 @@
-
-
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-  <title>Max McGuinness</title>
-  <link rel="icon" href="images/pumpkin9.png" type="image/x-icon">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Max McGuinness</title>
+    <link rel="icon" href="images/pumpkin9.png" type="image/x-icon">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="animations.css">
+
     <style>
         .flex-container {
             display: flex;
             justify-content: space-between;
         }
 
-        .flex-container > .w-layout-cell {
-            flex: 1 1 50%; /* Cell can grow and shrink and should take up 50% of the total space */
+        .flex-container > .grid-cell {
+            flex: 1 1 50%;
             box-sizing: border-box;
             padding: 0 0px;
         }
 
-        /* Add a new style for the background image */
         .background {
             position: fixed;
-            z-index: 0; /* Ensure it's behind all other elements */
+            z-index: 0;
             top: 0;
             left: 0;
             height: 100%;
             width: 100%;
             background: url(images/black-orchid.png);
-            opacity: 0.3; 
+            opacity: 0.3;
             background-repeat: repeat;
         }
 
-        /* Updated gradient style */
         .qs2 {
             position: fixed;
-            z-index: -1; /* Still behind other elements, but above the background */
+            z-index: -1;
             top: 0;
             left: 0;
             height: 100%;
@@ -46,121 +47,94 @@
         }
     </style>
 </head>
-    
+
 <body class="body">
-    <!-- Add div for background image -->
     <div class="background"></div>
-    <!-- Add div for gradient -->
     <div class="qs2"></div>
 
-    <div class="w-layout-layout quick-stack-2  wf-layout-layout grid-container">
-        <div class="w-layout-cell cell-2" style="box-shadow: 10px 0px 100px rgba(255, 255, 255, 0.3);">
-          
-          <div class="w-layout-vflex flex-block slideInFromLeft1Animation">
-              <div class="div-block slideInFromLeft2Animation">
-                <h1 class="heading">Max McGuinness</h1>
-              </div>
-              <p class="paragraph">Hello! I&#x27;m a UK-based software developer and data scientist, who sometimes makes art and other weird stuff. I recently graduated in <strong>Computer Science</strong> (BA+MEng) from the University of Cambridge.<!-- <br><br>You can reach me by email at <strong>em gee em fifty two @cam.ac.uk</strong>.--></p>
-              <div class="w-layout-hflex flex-block-2">
-                <a href="https://www.linkedin.com/in/max-mcguinness/" target="_blank" class="sm-icon-link w-inline-block">
-                  <img src="images/LinkedIn.svg" loading="lazy" alt="" class="sm-icon">
-                </a>
-                <a href="https://github.com/mgm52" target="_blank" class="sm-icon-link w-inline-block">
-                  <img src="images/github-mark.svg" loading="lazy" alt="" class="sm-icon">
-                </a>
-                <a id="itch-link" target="_blank" class="sm-icon-link w-inline-block">
-                  <img src="images/itchio-textless-black.svg" loading="lazy" alt="" class="sm-icon">
-                </a>
-                <a href="https://arxiv.org/search/cs?searchtype=author&query=McGuinness%2C+M" target="_blank" class="sm-icon-link w-inline-block">
-                  <img src="images/arxiv-logomark-small.svg" loading="lazy" alt="" class="sm-icon" style = "margin: 12 0">
-                </a>
-                <a id="email-link" target="_blank" class="sm-icon-link w-inline-block">
-                  <img src="images/mail.svg" loading="lazy" alt="" class="sm-icon" style="margin: 12 5 5 5; opacity: 0.8">
-                </a>
-              </div>
+    <div class="grid-container">
+        <div class="grid-cell main-cell" style="box-shadow: 10px 0px 100px rgba(255, 255, 255, 0.3);">
+            <div class="flex-vertical slideInFromLeft1Animation">
+                <div class="text-highlighter slideInFromLeft2Animation">
+                    <h1 class="heading">Max McGuinness</h1>
+                </div>
+                <p class="paragraph">
+                    Hello! I&#x27;m a UK-based software developer and data scientist, who sometimes makes art and other weird stuff. I recently graduated in <strong>Computer Science</strong> (BA+MEng) from the University of Cambridge.
+                </p>
+                <div class="flex-horizontal">
+                    <!-- Social Media Links -->
+                    <a href="https://www.linkedin.com/in/max-mcguinness/" target="_blank" class="sm-icon-link w-inline-block">
+                        <img src="images/LinkedIn.svg" loading="lazy" alt="" class="sm-icon">
+                    </a>
+                    <a href="https://github.com/mgm52" target="_blank" class="sm-icon-link w-inline-block">
+                        <img src="images/github-mark.svg" loading="lazy" alt="" class="sm-icon">
+                    </a>
+                    <a id="itch-link" target="_blank" class="sm-icon-link w-inline-block">
+                        <img src="images/itchio-textless-black.svg" loading="lazy" alt="" class="sm-icon">
+                    </a>
+                    <a href="https://arxiv.org/search/cs?searchtype=author&query=McGuinness%2C+M" target="_blank" class="sm-icon-link w-inline-block">
+                        <img src="images/arxiv-logomark-small.svg" loading="lazy" alt="" class="sm-icon" style="margin: 12px 0;">
+                    </a>
+                    <a id="email-link" target="_blank" class="sm-icon-link w-inline-block">
+                        <img src="images/mail.svg" loading="lazy" alt="" class="sm-icon" style="margin: 12px 5px 5px 5px; opacity: 0.8">
+                    </a>
+                </div>
             </div>
-    
         </div>
-        <div class="w-layout-cell" style="box-shadow: 00px 300px 0px 00px rgba(0, 0, 0, .2)">
-          
-          <img src="images/IMG_9823_crop.jpg" loading="lazy" sizes="(max-width: 479px) 32vw, (max-width: 767px) 25vw, (max-width: 991px) 79vw, 787.5px" alt="" class="image slideInFromTop1Animation">
-          <!-- srcset="images/IMG_3624-p-500.jpg 500w, images/IMG_3624-p-800.jpg 800w, images/IMG_3624-p-1080.jpg 1080w, images/IMG_3624-p-1600.jpg 1600w, images/IMG_3624-p-2000.jpg 2000w, images/IMG_3624.jpg 2268w" -->
+        <div class="grid-cell" style="box-shadow: 0px 300px 0px 0px rgba(0, 0, 0, .2)">
+            <img src="images/IMG_9823_crop.jpg" loading="lazy" sizes="(max-width: 479px) 32vw, (max-width: 767px) 25vw, (max-width: 991px) 79vw, 787.5px" alt="" class="image slideInFromTop1Animation">
         </div>
-      </div>
-      <div class="w-embed">
+    </div>
 
-      
-      </div>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Email handling
             var user = 'maxgmcguinness';
             var domain = 'gmail.com';
             var emailElement = document.getElementById('email-link');
             emailElement.href = 'mailto:' + user + '@' + domain;
-            
+
+            // Itch link handling
             var itchElement = document.getElementById('itch-link');
             itchElement.href = 'https://' + 'yttabmow'.split("").reverse().join("") + '.itch.io';
         });
-    
-  
-        document.querySelectorAll('.div-block').forEach(function(element) {
-  element.addEventListener('mousedown', function() {
-    element.classList.remove('slideInFromLeft2Animation');
-  });
-});
 
-document.querySelectorAll('.flex-block').forEach(function(element) {
-  element.addEventListener('mousedown', function() {
-    element.classList.remove('slideInFromLeft1Animation');
-  });
-});
+        // Remove animations after mouse down
+        document.querySelectorAll('.text-highlighter, .flex-vertical, .image').forEach(function (element) {
+            element.addEventListener('mousedown', function () {
+                element.classList.remove('slideInFromLeft2Animation', 'slideInFromLeft1Animation', 'slideInFromTop1Animation');
+            });
+        });
 
-document.querySelectorAll('.image').forEach(function(element) {
-  element.addEventListener('mousedown', function() {
-    element.classList.remove('slideInFromTop1Animation');
-  });
-});
+        // Add active class after mouse down
+        document.querySelectorAll('.flex-vertical, .image').forEach(function (element) {
+            element.addEventListener('mousedown', function () {
+                element.classList.add('active');
+                setTimeout(function () {
+                    element.classList.remove('active');
+                }, 500);
+            });
+        });
+    </script>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
 
+        const firebaseConfig = {
+            apiKey: "AIzaSyAL6eqzd2XsplZMtHO5E8nzeNpb4H1tb4o",
+            authDomain: "max-personal-767f6.firebaseapp.com",
+            projectId: "max-personal-767f6",
+            storageBucket: "max-personal-767f6.appspot.com",
+            messagingSenderId: "1008126349672",
+            appId: "1:1008126349672:web:90b310263753327177c6dd",
+            measurementId: "G-M7D755EHE7"
+        };
 
-        document.querySelectorAll('.flex-block, .image').forEach(function(element) {
-  element.addEventListener('mousedown', function() {
-    element.classList.add('active');
-    
-    // Remove the class after the animation completes
-    setTimeout(function() {
-      element.classList.remove('active');
-    }, 500); // Same time as the animation duration
-  });
-});
-
-
-
-  </script>
-
-  <script type="module">
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
-  
-    // Web app's Firebase configuration
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    const firebaseConfig = {
-      apiKey: "AIzaSyAL6eqzd2XsplZMtHO5E8nzeNpb4H1tb4o",
-      authDomain: "max-personal-767f6.firebaseapp.com",
-      projectId: "max-personal-767f6",
-      storageBucket: "max-personal-767f6.appspot.com",
-      messagingSenderId: "1008126349672",
-      appId: "1:1008126349672:web:90b310263753327177c6dd",
-      measurementId: "G-M7D755EHE7"
-    };
-  
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-  </script>
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+    </script>
 
 </body>
+
+</html>
