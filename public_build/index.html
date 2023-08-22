@@ -22,7 +22,7 @@
         }
 
         .noise {
-            position: fixed;
+            position: absolute;
             z-index: 0;
             top: 0;
             left: 0;
@@ -34,7 +34,7 @@
         }
 
         .colour-grad {
-            position: fixed;
+            position: absolute;
             z-index: -1;
             top: 0;
             left: 0;
@@ -48,14 +48,14 @@
     </style>
 </head>
 
-<body class="body">
+<body class="body loading">
     <div class="noise"></div>
     <div class="colour-grad"></div>
 
     <div class="grid-container">
         <div class="grid-cell main-cell" style="box-shadow: 10px 0px 100px rgba(255, 255, 255, 0.3);">
-            <div class="flex-vertical slideInFromLeft1Animation">
-                <div class="text-highlighter slideInFromLeft2Animation">
+            <div class="flex-vertical slideInFromLeft1Animation hide-until-loaded">
+                <div class="text-highlighter slideInFromLeft2Animation hide-until-loaded">
                     <h1 class="heading">Max McGuinness</h1>
                 </div>
                 <p class="paragraph">
@@ -65,26 +65,25 @@
                     <!-- Social Media Links -->
                     <a href="https://arxiv.org/search/cs?searchtype=author&query=McGuinness%2C+M" target="_blank" class="sm-icon-link w-inline-block">
                       <img src="images/arxiv-logomark-small.svg" loading="lazy" alt="" class="sm-icon" style="margin: 12px 0;">
-                  </a>
-                <a href="https://github.com/mgm52" target="_blank" class="sm-icon-link w-inline-block">
-                  <img src="images/github-mark.svg" loading="lazy" alt="" class="sm-icon">
-              </a>
-              <a id="itch-link" target="_blank" class="sm-icon-link w-inline-block">
-                <img src="images/itchio-textless-black.svg" loading="lazy" alt="" class="sm-icon">
-            </a>
-
+                    </a>
+                    <a href="https://github.com/mgm52" target="_blank" class="sm-icon-link w-inline-block">
+                        <img src="images/github-mark.svg" loading="lazy" alt="" class="sm-icon">
+                    </a>
+                    <a id="itch-link" target="_blank" class="sm-icon-link w-inline-block">
+                        <img src="images/itchio-textless-black.svg" loading="lazy" alt="" class="sm-icon">
+                    </a>
                     <a href="https://www.linkedin.com/in/max-mcguinness/" target="_blank" class="sm-icon-link w-inline-block">
                         <img src="images/LinkedIn.svg" loading="lazy" alt="" class="sm-icon">
                     </a>
                     <a id="email-link" target="_blank" class="sm-icon-link w-inline-block">
                       <img src="images/mail.svg" loading="lazy" alt="" class="sm-icon" style="margin: 12px 5px 5px 5px; opacity: 0.8">
-                  </a>
-  
+                    </a>
                 </div>
             </div>
         </div>
         <div class="grid-cell" style="box-shadow: 0px 300px 0px 0px rgba(0, 0, 0, .2)">
-            <img src="images/IMG_9823_crop.jpg" loading="lazy" sizes="(max-width: 479px) 32vw, (max-width: 767px) 25vw, (max-width: 991px) 79vw, 787.5px" alt="" class="image slideInFromTop1Animation">
+            <!-- Profile Pic -->
+            <img src="images/IMG_9823_crop.jpg" loading="lazy" sizes="(max-width: 479px) 32vw, (max-width: 767px) 25vw, (max-width: 991px) 79vw, 787.5px" alt="" class="image slideInFromTop1Animation hide-until-loaded">
         </div>
     </div>
 
@@ -117,6 +116,23 @@
                 }, 500);
             });
         });
+
+        // Trigger animations once page is loaded
+        window.addEventListener("load", function() {
+            document.body.classList.remove('loading');
+        });
+
+        // Parallax effect
+        document.addEventListener("scroll", function() {
+            var scrolled = window.scrollY;
+        
+            var parallaxSpeed1 = 0.4;
+            var parallaxSpeed2 = 0.6;
+        
+            document.querySelector(".noise").style.transform = "translateY(" + (scrolled * parallaxSpeed1) + "px)";
+            document.querySelector(".colour-grad").style.transform = "translateY(" + (scrolled * parallaxSpeed2) + "px)";
+        });
+
     </script>
 
     <script type="module">
