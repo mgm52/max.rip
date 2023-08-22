@@ -121,18 +121,6 @@
         window.addEventListener("load", function() {
             document.body.classList.remove('loading');
         });
-
-        // Parallax effect
-        document.addEventListener("scroll", function() {
-            var scrolled = window.scrollY;
-        
-            var parallaxSpeed1 = 0.4;
-            var parallaxSpeed2 = 0.6;
-        
-            document.querySelector(".noise").style.transform = "translateY(" + (scrolled * parallaxSpeed1) + "px)";
-            document.querySelector(".colour-grad").style.transform = "translateY(" + (scrolled * parallaxSpeed2) + "px)";
-        });
-
     </script>
 
     <script type="module">
