@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Max McGuinness</title>
-    <link rel="icon" href="images/pumpkin9.png" type="image/x-icon">
+    <link rel="icon" href="images/pumpkin9_32.ico" type="image/x-icon">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="animations.css">
 
@@ -45,21 +45,42 @@
             opacity: 1;
             animation: Gradient 10s ease infinite;
         }
+
+        #loading-screen {
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.75);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            will-change: transform;
+        }
+
     </style>
 </head>
 
 <body class="body loading">
+    <div id="loading-screen">
+        <div class="loader">
+        </div>
+        
+          
+          
+      </div>
+
     <div class="noise"></div>
     <div class="colour-grad"></div>
 
     <div class="grid-container">
         <div class="grid-cell main-cell" style="box-shadow: 10px 0px 100px rgba(255, 255, 255, 0.3);">
             <div class="flex-vertical slideInFromLeft1Animation hide-until-loaded">
-                <div class="text-highlighter slideInFromLeft2Animation hide-until-loaded">
+                <div class="text-highlighter slideInFromLeft2Animation">
                     <h1 class="heading">Max McGuinness</h1>
                 </div>
                 <p class="paragraph">
-                    Hello! I&#x27;m a UK-based software developer and data scientist, who sometimes makes art and other weird stuff. I recently graduated in <strong>Computer Science</strong> (BA+MEng) from the University of Cambridge.
+                    Hello! I&#x27;m a UK-based software developer and data scientist, who sometimes makes art and other weird stuff. In 2023, I graduated in Computer Science (BA+MEng) from the University of Cambridge.
                 </p>
                 <div class="flex-horizontal">
                     <!-- Social Media Links -->
@@ -83,12 +104,25 @@
         </div>
         <div class="grid-cell" style="box-shadow: 0px 300px 0px 0px rgba(0, 0, 0, .2)">
             <!-- Profile Pic -->
-            <img src="images/IMG_9823_crop.jpg" loading="lazy" sizes="(max-width: 479px) 32vw, (max-width: 767px) 25vw, (max-width: 991px) 79vw, 787.5px" alt="" class="image slideInFromTop1Animation hide-until-loaded">
+            <img src="images/IMG_9823_crop_prog.jpg" loading="lazy" sizes="(max-width: 479px) 32vw, (max-width: 767px) 25vw, (max-width: 991px) 79vw, 787.5px" alt="" class="image slideInFromTop1Animation hide-until-loaded">
         </div>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+
+
+        // Remove animations after mouse down
+        //document.querySelectorAll('.text-highlighter, .flex-vertical, .image').forEach(function (element) {
+            
+        //});
+
+        
+
+        // Trigger animations once page is loaded
+        window.addEventListener("load", function() {
+            document.body.classList.remove('loading');
+            document.getElementById('loading-screen').style.display = 'none';
+
             // Email handling
             var user = 'maxgmcguinness';
             var domain = 'gmail.com';
@@ -100,15 +134,12 @@
             itchElement.href = 'https://' + 'yttabmow'.split("").reverse().join("") + '.itch.io';
         });
 
-        // Remove animations after mouse down
-        document.querySelectorAll('.text-highlighter, .flex-vertical, .image').forEach(function (element) {
+
+        // Add active class after mouse down
+        document.querySelectorAll('.image').forEach(function (element) {
             element.addEventListener('mousedown', function () {
                 element.classList.remove('slideInFromLeft2Animation', 'slideInFromLeft1Animation', 'slideInFromTop1Animation');
             });
-        });
-
-        // Add active class after mouse down
-        document.querySelectorAll('.flex-vertical, .image').forEach(function (element) {
             element.addEventListener('mousedown', function () {
                 element.classList.add('active');
                 setTimeout(function () {
@@ -116,14 +147,9 @@
                 }, 500);
             });
         });
-
-        // Trigger animations once page is loaded
-        window.addEventListener("load", function() {
-            document.body.classList.remove('loading');
-        });
     </script>
 
-    <script type="module">
+    <!--<script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
 
@@ -139,6 +165,6 @@
 
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
-    </script>
+    </script>-->
   </body>
 </html>
