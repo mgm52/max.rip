@@ -1,170 +1,344 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Max McGuinness</title>
-    <link rel="icon" href="images/pumpkin9_32.ico" type="image/x-icon">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="animations.css">
-
+    <title>Max Mcguinness</title>
     <style>
-        .flex-container {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .flex-container > .grid-cell {
-            flex: 1 1 50%;
+        * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
-            padding: 0 0px;
         }
 
-        .noise {
-            position: absolute;
-            z-index: 0;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 100%;
-            background: url(images/black-orchid.png);
-            opacity: 0.3;
-            background-repeat: repeat;
+        @keyframes flicker {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
         }
 
-        .colour-grad {
-            position: absolute;
-            z-index: -1;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 100%;
-            background-image: linear-gradient(-45deg, #5C54C7, #54B2C7, #A2C754, #C75454);
-            background-size: 300%;
-            opacity: 1;
-            animation: Gradient 10s ease infinite;
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        #loading-screen {
+        @keyframes slideDown {
+            from { 
+                clip-path: inset(0 0 0 0);
+            }
+            to { 
+                clip-path: inset(100% 0 0 0);
+            }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        body {
+            font-family: "Courier New", monospace;
+            line-height: 1.4;
+            color: #00ff00;
+            background-color: #000000;
+            padding: 4rem;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
             position: fixed;
-            width: 100%;
-            height: 100vh;
-            background-color: rgba(0, 0, 0, 0.75);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #000000;
             z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            will-change: transform;
+            animation: slideDown 4s ease-out forwards;
+            pointer-events: none;
         }
 
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            opacity: 0.1;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4rem;
+            max-width: 500px; /* Limit the width */
+            margin: 0 auto; /* Center the section horizontally */
+            position: relative;
+            z-index: 1;
+        }
+
+
+        .left-column {
+            position: sticky;
+            top: 2rem;
+            height: fit-content;
+        }
+
+        .profile-container {
+            margin-bottom: 3rem;
+            position: relative;
+            border: 1px solid #00ff00;
+            padding: 1rem;
+            max-width: 466px;
+        }
+
+        .profile-container::before {
+            content: '[ME] [THATS ME]';
+            position: absolute;
+            top: -0.8em;
+            left: 1rem;
+            background: #000;
+            padding: 0 0.5rem;
+            color: #00ff00;
+            font-size: 0.8rem;
+        }
+
+        .profile-image {
+            width: 200px;
+            height: 280px;
+            border: 1px solid #00ff00;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /*filter: saturate(0);*/
+        }
+
+        .profile-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+
+        .bio { /* Styles for <p class="bio"> */
+            color: #00cc00;
+            max-width: 80%; /* On desktop, relative to .profile-container */
+            margin-bottom: 0.5rem; /* Space between bio paragraphs */
+            /* Text alignment will be handled by parent or specific rules */
+        }
+
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #00ff00;
+            margin-bottom: 1rem;
+        }
+
+        .section-title::before {
+            content: '>';
+            margin-right: 0.5rem;
+        }
+
+        .project {
+            border: 1px solid #00ff00;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .project:hover {
+            background: #00ff0011;
+            transform: translateX(5px);
+        }
+
+        .project h3 {
+            font-size: 1rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .contact a {
+            color: #00ff00;
+            text-decoration: none;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .contact a:hover {
+            /*text-shadow: 0 0 10px #00ff00;*/
+        }
+
+        .contact a::before {
+            content: '[';
+            margin-right: 0.2rem;
+        }
+
+        .contact a::after {
+            content: ']';
+            margin-left: 0.2rem;
+        }
+
+        /* General link styles - these are fine */
+        a:link {
+        color: #44ff44;
+        background-color: transparent;
+        text-decoration: underline;
+        }
+
+        a:visited {
+        color: #44ff44;
+        background-color: transparent;
+        text-decoration: none;
+        }
+
+        a:hover {
+        color: red;
+        background-color: transparent;
+        text-decoration: underline;
+        }
+
+        a:active {
+        color: white;
+        background-color: transparent;
+        text-decoration: underline;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 0.75em; /* Scales with parent font-size */
+            height: 0.3em; /* Scales with parent font-size */
+            background-color: #004400;
+            animation: blink 1s step-end infinite;
+            margin-bottom: 0.3em;
+            margin-left: 0em;
+            vertical-align: bottom; /* This should keep it aligned like an underscore */
+        }
+
+        /* --- MOBILE STYLES --- */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem; /* Reduce body padding */
+            }
+
+            .content-wrapper {
+                grid-template-columns: 1fr; /* Ensures single column */
+                gap: 1.5rem; /* Reduce gap */
+            }
+
+            .left-column {
+                position: relative; /* Remove sticky behavior */
+                top: 0;
+            }
+
+            .profile-container {
+                padding: 1rem; /* Keep padding or adjust as needed */
+                margin-bottom: 2rem; /* Adjust margin */
+            }
+            /* The .profile-container::before label should be fine relative to container */
+
+            .profile-image {
+                width: 130px; /* Adjust image size */
+                height: 182px; /* Maintain aspect ratio (130 * 280/200) */
+                margin-left: auto;   /* Center the image block */
+                margin-right: auto;
+                margin-bottom: 1rem; /* Space below image */
+            }
+
+            h1 {
+                font-size: 1.3rem; /* Adjust heading size */
+                text-align: center; /* Center heading */
+            }
+
+            .bio { /* Styles for each <p class="bio"> on mobile */
+                max-width: 90%; /* Allow bio paragraphs to be wider relative to container */
+                margin-left: auto; /* Center the paragraph block */
+                margin-right: auto;
+                text-align: left; /* Keep text inside the paragraph left-aligned */
+                font-size: 0.95rem; /* Slightly adjust font size for readability */
+            }
+
+            .contact {
+                flex-direction: column; /* Stack vertically on mobile too */
+                align-items: center; /* Center the divs */
+                gap: 0.5rem; /* Space between rows */
+                margin-top: 1.5rem; /* Space above contact links */
+            }
+            
+            .contact > div {
+                flex-wrap: wrap; /* Allow links within each div to wrap if needed */
+                justify-content: center; /* Center the links */
+                gap: 0.5rem 1rem; /* Spacing between links */
+            }
+
+            .contact a {
+                font-size: 0.9rem; /* Adjust link font size */
+            }
+
+            .rain { /* Optional: for performance/visuals on mobile */
+                font-size: 0.9rem; /* Smaller matrix rain characters */
+                opacity: 0.07; /* Make it even more subtle */
+            }
+
+        }
     </style>
 </head>
-
-<body class="body loading">
-    <div id="loading-screen">
-        <div class="loader">
-        </div>
-        
-          
-          
-      </div>
-
-    <div class="noise"></div>
-    <div class="colour-grad"></div>
-
-    <div class="grid-container">
-        <div class="grid-cell main-cell" style="box-shadow: 10px 0px 100px rgba(255, 255, 255, 0.3);">
-            <div class="flex-vertical slideInFromLeft1Animation hide-until-loaded">
-                <div class="text-highlighter slideInFromLeft2Animation">
-                    <h1 class="heading">Max McGuinness</h1>
+<body>
+    <div class="matrix-bg" id="matrix-bg"></div>
+    
+    <div class="content-wrapper">
+        <div class="left-column">
+            <div class="profile-container">
+                <div class="profile-image">
+                    <img src="IMG_1361.jpg" alt="Max">
                 </div>
-                <p class="paragraph">
-                    Hello! I&#x27;m a UK-based software developer and data scientist, who sometimes makes art and other weird stuff. In 2023, I graduated in Computer Science (BA+MEng) from the University of Cambridge.
-                </p>
-                <div class="flex-horizontal">
-                    <!-- Social Media Links -->
-                    <a href="https://arxiv.org/search/cs?searchtype=author&query=McGuinness%2C+M" target="_blank" class="sm-icon-link w-inline-block">
-                      <img src="images/arxiv-logomark-small.svg" loading="lazy" alt="" class="sm-icon" style="margin: 12px 0;">
-                    </a>
-                    <a href="https://github.com/mgm52" target="_blank" class="sm-icon-link w-inline-block">
-                        <img src="images/github-mark.svg" loading="lazy" alt="" class="sm-icon">
-                    </a>
-                    <a id="itch-link" target="_blank" class="sm-icon-link w-inline-block">
-                        <img src="images/itchio-textless-black.svg" loading="lazy" alt="" class="sm-icon">
-                    </a>
-                    <a href="https://www.linkedin.com/in/max-mcguinness/" target="_blank" class="sm-icon-link w-inline-block">
-                        <img src="images/LinkedIn.svg" loading="lazy" alt="" class="sm-icon">
-                    </a>
-                    <a id="email-link" target="_blank" class="sm-icon-link w-inline-block">
-                      <img src="images/mail.svg" loading="lazy" alt="" class="sm-icon" style="margin: 12px 5px 5px 5px; opacity: 0.8">
-                    </a>
-                </div>
+                <h1>MAX MCGUINNESS</h1>
+                <p class="bio">> Hello! I'm a UK-based ML engineer. I sometimes make weird <a href="https://wombatty.itch.io/">things</a> like this ugly website.</p>
+                <p class="bio">> In 2023, I completed a computer science degree at Cambridge (BA+MEng), and now work in London.</p>
+                <p class="bio">> <span class="cursor"></span></p>
             </div>
-        </div>
-        <div class="grid-cell" style="box-shadow: 0px 300px 0px 0px rgba(0, 0, 0, .2)">
-            <!-- Profile Pic -->
-            <img src="images/IMG_9823_crop_prog.jpg" loading="lazy" sizes="(max-width: 479px) 32vw, (max-width: 767px) 25vw, (max-width: 991px) 79vw, 787.5px" alt="" class="image slideInFromTop1Animation hide-until-loaded">
+            <nav class="contact">
+                <div style="display: flex; gap: 2rem;">
+                    <a href="https://github.com/mgm52">GITHUB</a>
+                    <a href="https://arxiv.org/search/?query=McGuinness%2C+Max&searchtype=author&abstracts=show&order=-announced_date_first">ARXIV</a>
+                    <a href="https://wombatty.itch.io/">ITCH</a>
+                    <a href="https://linkedin.com/in/max-mcguinness/">LINKEDIN</a>
+                </div>
+                <div style="display: flex; gap: 2rem; margin-top: 0.5rem;">
+                    <a href="mailto:max@max.rip">EMAIL</a>
+                    <a href="https://aol.com">AOL</a>
+                </div>
+            </nav>
         </div>
     </div>
 
-    <script>
-
-
-        // Remove animations after mouse down
-        //document.querySelectorAll('.text-highlighter, .flex-vertical, .image').forEach(function (element) {
-            
-        //});
-
-        
-
-        // Trigger animations once page is loaded
-        window.addEventListener("load", function() {
-            document.body.classList.remove('loading');
-            document.getElementById('loading-screen').style.display = 'none';
-
-            // Email handling
-            var user = 'maxgmcguinness';
-            var domain = 'gmail.com';
-            var emailElement = document.getElementById('email-link');
-            emailElement.href = 'mailto:' + user + '@' + domain;
-
-            // Itch link handling
-            var itchElement = document.getElementById('itch-link');
-            itchElement.href = 'https://' + 'yttabmow'.split("").reverse().join("") + '.itch.io';
-        });
-
-
-        // Add active class after mouse down
-        document.querySelectorAll('.image').forEach(function (element) {
-            element.addEventListener('mousedown', function () {
-                element.classList.remove('slideInFromLeft2Animation', 'slideInFromLeft1Animation', 'slideInFromTop1Animation');
-            });
-            element.addEventListener('mousedown', function () {
-                element.classList.add('active');
-                setTimeout(function () {
-                    element.classList.remove('active');
-                }, 500);
-            });
-        });
-    </script>
-
-    <!--<script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyAL6eqzd2XsplZMtHO5E8nzeNpb4H1tb4o",
-            authDomain: "max-personal-767f6.firebaseapp.com",
-            projectId: "max-personal-767f6",
-            storageBucket: "max-personal-767f6.appspot.com",
-            messagingSenderId: "1008126349672",
-            appId: "1:1008126349672:web:90b310263753327177c6dd",
-            measurementId: "G-M7D755EHE7"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-    </script>-->
-  </body>
+</body>
 </html>
