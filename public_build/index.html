@@ -3,8 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Max Mcguinness</title>
+    <title>Max McGuinness</title>
+    <meta name="description" content="Max McGuinness - UK-based ML engineer and Cambridge CS graduate. Making weird things in London.">
+    <meta name="author" content="Max McGuinness">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Max McGuinness">
+    <meta property="og:description" content="UK-based ML engineer and Cambridge CS graduate. Making weird things in London.">
+    <meta property="og:url" content="https://max.rip">
+    <meta property="og:image" content="https://max.rip/IMG_1361.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Max McGuinness">
+    <meta name="twitter:description" content="UK-based ML engineer and Cambridge CS graduate. Making weird things in London.">
+
+    <!-- Favicon (terminal-style green cursor) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%2300ff00' x='10' y='70' width='80' height='20'/></svg>">
     <style>
+        :root {
+            --color-primary: #00ff00;
+            --color-secondary: #00cc00;
+            --color-link: #44ff44;
+            --color-bg: #000000;
+            --color-cursor: #004400;
+            --animation-duration: 4s;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -39,14 +65,14 @@
         body {
             font-family: "Courier New", monospace;
             line-height: 1.4;
-            color: #00ff00;
-            background-color: #000000;
+            color: var(--color-primary);
+            background-color: var(--color-bg);
             padding: 4rem;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
         }
-        
+
         body::before {
             content: '';
             position: fixed;
@@ -54,20 +80,10 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #000000;
+            background-color: var(--color-bg);
             z-index: 9999;
-            animation: slideDown 4s ease-out forwards;
+            animation: slideDown var(--animation-duration) ease-out forwards;
             pointer-events: none;
-        }
-
-        .matrix-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-            opacity: 0.1;
         }
 
         .content-wrapper {
@@ -90,7 +106,7 @@
         .profile-container {
             margin-bottom: 3rem;
             position: relative;
-            border: 1px solid #00ff00;
+            border: 1px solid var(--color-primary);
             padding: 1rem;
             max-width: 466px;
         }
@@ -100,18 +116,17 @@
             position: absolute;
             top: -0.8em;
             left: 1rem;
-            background: #000;
+            background: var(--color-bg);
             padding: 0 0.5rem;
-            color: #00ff00;
+            color: var(--color-primary);
             font-size: 0.8rem;
         }
 
         .profile-image {
             width: 200px;
             height: 280px;
-            border: 1px solid #00ff00;
+            border: 1px solid var(--color-primary);
             margin-bottom: 1rem;
-            position: relative;
             overflow: hidden;
         }
 
@@ -119,16 +134,6 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            /*filter: saturate(0);*/
-        }
-
-        .profile-image::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
         }
 
         h1 {
@@ -137,11 +142,10 @@
             margin-bottom: 0.5rem;
         }
 
-        .bio { /* Styles for <p class="bio"> */
-            color: #00cc00;
-            max-width: 80%; /* On desktop, relative to .profile-container */
-            margin-bottom: 0.5rem; /* Space between bio paragraphs */
-            /* Text alignment will be handled by parent or specific rules */
+        .bio {
+            color: var(--color-secondary);
+            max-width: 80%;
+            margin-bottom: 0.5rem;
         }
 
 
@@ -153,7 +157,7 @@
             font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            color: #00ff00;
+            color: var(--color-primary);
             margin-bottom: 1rem;
         }
 
@@ -163,14 +167,14 @@
         }
 
         .project {
-            border: 1px solid #00ff00;
+            border: 1px solid var(--color-primary);
             padding: 1rem;
             margin-bottom: 1rem;
             transition: all 0.3s ease;
         }
 
         .project:hover {
-            background: #00ff0011;
+            background: rgba(0, 255, 0, 0.07);
             transform: translateX(5px);
         }
 
@@ -187,14 +191,14 @@
         }
 
         .contact a {
-            color: #00ff00;
+            color: var(--color-primary);
             text-decoration: none;
             position: relative;
             transition: all 0.3s ease;
         }
 
         .contact a:hover {
-            /*text-shadow: 0 0 10px #00ff00;*/
+            text-shadow: 0 0 10px var(--color-primary);
         }
 
         .contact a::before {
@@ -207,40 +211,54 @@
             margin-left: 0.2rem;
         }
 
-        /* General link styles - these are fine */
         a:link {
-        color: #44ff44;
-        background-color: transparent;
-        text-decoration: underline;
+            color: var(--color-link);
+            background-color: transparent;
+            text-decoration: underline;
         }
 
         a:visited {
-        color: #44ff44;
-        background-color: transparent;
-        text-decoration: none;
+            color: var(--color-link);
+            background-color: transparent;
+            text-decoration: none;
         }
 
         a:hover {
-        color: red;
-        background-color: transparent;
-        text-decoration: underline;
+            color: red;
+            background-color: transparent;
+            text-decoration: underline;
         }
 
         a:active {
-        color: white;
-        background-color: transparent;
-        text-decoration: underline;
+            color: white;
+            background-color: transparent;
+            text-decoration: underline;
+        }
+
+        /* Accessibility: visible focus states for keyboard navigation */
+        a:focus {
+            outline: 2px solid var(--color-primary);
+            outline-offset: 2px;
+        }
+
+        a:focus:not(:focus-visible) {
+            outline: none;
+        }
+
+        a:focus-visible {
+            outline: 2px solid var(--color-primary);
+            outline-offset: 2px;
         }
 
         .cursor {
             display: inline-block;
-            width: 0.75em; /* Scales with parent font-size */
-            height: 0.3em; /* Scales with parent font-size */
-            background-color: #004400;
+            width: 0.75em;
+            height: 0.3em;
+            background-color: var(--color-cursor);
             animation: blink 1s step-end infinite;
             margin-bottom: 0.3em;
-            margin-left: 0em;
-            vertical-align: bottom; /* This should keep it aligned like an underscore */
+            margin-left: 0;
+            vertical-align: bottom;
         }
 
         /* --- MOBILE STYLES --- */
@@ -312,8 +330,6 @@
     </style>
 </head>
 <body>
-    <div class="matrix-bg" id="matrix-bg"></div>
-    
     <div class="content-wrapper">
         <div class="left-column">
             <div class="profile-container">
