@@ -144,6 +144,18 @@
             /* Text alignment will be handled by parent or specific rules */
         }
 
+        .terminal {
+            height: 11.5em; /* Fixed viewport: old lines push up and out of view */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            overflow: hidden;
+        }
+
+        .bio.term-input-text {
+            word-break: break-all; /* Long typed input wraps instead of overflowing */
+        }
+
 
         .section {
             margin-bottom: 3rem;
@@ -321,9 +333,11 @@
                     <img src="IMG_1361.jpg" alt="Max">
                 </div>
                 <h1>MAX MCGUINNESS</h1>
-                <p class="bio">> Hello! I'm a UK-based ML engineer. I sometimes make weird <a href="https://wombatty.itch.io/">things</a> like this ugly website.</p>
-                <p class="bio">> In 2023, I completed a CS MEng degree at Cambridge, and now work at Anthropic in London.</p>
-                <p class="bio">> <span class="cursor"></span></p>
+                <div class="terminal" id="terminal">
+                    <p class="bio">> Hello! I'm a UK-based ML engineer. I sometimes make weird <a href="https://wombatty.itch.io/">things</a> like this ugly website.</p>
+                    <p class="bio">> In 2023, I completed a CS MEng degree at Cambridge, and now work at Anthropic in London.</p>
+                    <p class="bio term-input-text" id="term-prompt">> <span id="term-input"></span><span class="cursor"></span></p>
+                </div>
             </div>
             <nav class="contact">
                 <div style="display: flex; gap: 2rem;">
@@ -341,6 +355,167 @@
             </nav>
         </div>
     </div>
+
+    <script>
+        (function () {
+            const terminal = document.getElementById('terminal');
+            const promptLine = document.getElementById('term-prompt');
+            const inputSpan = document.getElementById('term-input');
+            let inputBuffer = '';
+
+            // Fake filesystem: objects are directories, strings are files
+            const fsRoot = {
+                home: {
+                    'goblin_cheats.md': 'mgm52.github.io...\ntry shift clicking R',
+                    max: {
+                        'README.md': [
+                            ' /\\_/\\',
+                            '( o.o )',
+                            ' > ^ <',
+                        ].join('\n'),
+                    },
+                },
+            };
+
+            let cwd = ['home', 'max'];
+
+            // Resolve a path string to {node, segs} or null if it doesn't exist
+            function resolve(pathStr) {
+                let segs = pathStr.startsWith('/') ? [] : cwd.slice();
+                for (const part of pathStr.split('/')) {
+                    if (part === '' || part === '.') continue;
+                    if (part === '..') { segs.pop(); continue; }
+                    segs.push(part);
+                }
+                let node = fsRoot;
+                for (const seg of segs) {
+                    if (typeof node !== 'object' || !(seg in node)) return null;
+                    node = node[seg];
+                }
+                return { node: node, segs: segs };
+            }
+
+            const commands = {
+                pwd: () => '/' + cwd.join('/'),
+                cd: (args) => {
+                    const target = args.length === 0 ? '/home/max' : args[0];
+                    const r = resolve(target);
+                    if (!r) return 'cd: ' + target + ': No such file or directory';
+                    if (typeof r.node !== 'object') return 'cd: ' + target + ': Not a directory';
+                    cwd = r.segs;
+                    return '';
+                },
+                ls: (args) => {
+                    const r = resolve(args.length === 0 ? '.' : args[0]);
+                    if (!r) return 'ls: ' + args[0] + ': No such file or directory';
+                    if (typeof r.node !== 'object') return args[0]; // ls on a file echoes it
+                    return Object.keys(r.node)
+                        .map(name => typeof r.node[name] === 'object' ? name + '/' : name)
+                        .join('  ');
+                },
+                cat: (args) => {
+                    if (args.length === 0) return 'cat: missing operand';
+                    return args.map(name => {
+                        const r = resolve(name);
+                        if (!r) return 'cat: ' + name + ': No such file or directory';
+                        if (typeof r.node === 'object') return 'cat: ' + name + ': Is a directory';
+                        return r.node;
+                    }).join('\n');
+                },
+                claude: () => {
+                    const crab = [
+                        '      ████████████████████████      ',
+                        '      ████  ████████████  ████      ',
+                        '  ████████████████████████████████  ',
+                        '      ████████████████████████      ',
+                        '        ██  ██        ██  ██        ',
+                    ];
+                    const heart = [
+                        '  ████  ████  ',
+                        '██████████████',
+                        '  ██████████  ',
+                        '    ██████    ',
+                        '      ██      ',
+                    ];
+                    // Double crab rows vertically so pixels come out square;
+                    // keep the heart single-height (smaller), centered beside the crab
+                    const crabRows = crab.flatMap(r => [r, r]);
+                    const heartRows = ['', '', ...heart, '', '', ''];
+                    const p = printLine('', '#da7756');
+                    p.style.lineHeight = '1'; // solid pixel rows
+                    p.style.fontSize = '0.55rem';
+                    p.style.maxWidth = 'none';
+                    crabRows.forEach((row, i) => {
+                        p.appendChild(document.createTextNode(row + '  '));
+                        const s = document.createElement('span');
+                        s.style.color = '#ff5555';
+                        s.textContent = heartRows[i];
+                        p.appendChild(s);
+                        p.appendChild(document.createTextNode('\n'));
+                    });
+                    return '';
+                },
+                echo: (args) => args.join(' ') || ' ',
+                duck: () => '<3',
+                quack: () => '<3',
+                whoami: () => 'max',
+                help: () => [
+                    'available commands:',
+                    '  pwd   ls    cd <dir>',
+                    '  cat <file>  echo <text>',
+                    '  help  sudo  claude',
+                    '  whoami',
+                ].join('\n'),
+                sudo: () => 'max is not in the sudoers file. This incident will be reported.',
+            };
+
+            function printLine(text, color) {
+                const p = document.createElement('p');
+                p.className = 'bio term-input-text';
+                p.style.whiteSpace = 'pre-wrap'; // preserve spacing for ascii art
+                if (color) p.style.color = color;
+                p.textContent = text;
+                terminal.insertBefore(p, promptLine);
+                return p;
+            }
+
+            function runCommand(raw) {
+                // Freeze the typed command as a historical line
+                printLine('> ' + raw);
+                const cmd = raw.trim();
+                if (cmd === '') return;
+                const parts = cmd.split(/\s+/);
+                const name = parts[0].toLowerCase();
+                const args = parts.slice(1);
+                if (commands[name]) {
+                    const output = commands[name](args);
+                    if (output) printLine(output);
+                } else {
+                    printLine(name + ': command not found');
+                }
+            }
+
+            document.addEventListener('keydown', function (e) {
+                // Don't swallow browser shortcuts or typing in real inputs
+                if (e.ctrlKey || e.metaKey || e.altKey) return;
+                const tag = document.activeElement && document.activeElement.tagName;
+                if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+
+                if (e.key === 'Enter') {
+                    runCommand(inputBuffer);
+                    inputBuffer = '';
+                } else if (e.key === 'Backspace') {
+                    inputBuffer = inputBuffer.slice(0, -1);
+                } else if (e.key.length === 1) {
+                    inputBuffer += e.key;
+                    if (e.key === ' ') e.preventDefault(); // stop page scroll
+                } else {
+                    return;
+                }
+                inputSpan.textContent = inputBuffer;
+            });
+        })();
+    </script>
 
 </body>
 </html>
