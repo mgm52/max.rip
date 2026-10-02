@@ -198,6 +198,15 @@
             gap: 0.5rem;
         }
 
+        .contact-row {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .contact-row + .contact-row {
+            margin-top: 0.5rem;
+        }
+
         .contact a {
             color: #00ff00;
             text-decoration: none;
@@ -292,6 +301,7 @@
 
             .bio { /* Styles for each <p class="bio"> on mobile */
                 max-width: 90%; /* Allow bio paragraphs to be wider relative to container */
+                width: 90%; /* Without this, the auto margins shrink short terminal lines and center them */
                 margin-left: auto; /* Center the paragraph block */
                 margin-right: auto;
                 text-align: left; /* Keep text inside the paragraph left-aligned */
@@ -299,16 +309,18 @@
             }
 
             .contact {
-                flex-direction: column; /* Stack vertically on mobile too */
-                align-items: center; /* Center the divs */
-                gap: 0.5rem; /* Space between rows */
+                /* Four links don't fit across a phone, so lay all eight out in
+                   an even two-column grid instead of letting rows wrap 3+1 */
+                display: grid;
+                grid-template-columns: repeat(2, auto);
+                justify-content: center;
+                justify-items: center;
+                gap: 1rem 2rem;
                 margin-top: 1.5rem; /* Space above contact links */
             }
-            
-            .contact > div {
-                flex-wrap: wrap; /* Allow links within each div to wrap if needed */
-                justify-content: center; /* Center the links */
-                gap: 0.5rem 1rem; /* Spacing between links */
+
+            .contact-row {
+                display: contents; /* Let the links join the grid directly */
             }
 
             .contact a {
@@ -340,13 +352,13 @@
                 </div>
             </div>
             <nav class="contact">
-                <div style="display: flex; gap: 2rem;">
+                <div class="contact-row">
                     <a href="https://github.com/mgm52">GITHUB</a>
                     <a href="https://arxiv.org/search/?query=McGuinness%2C+Max&searchtype=author&abstracts=show&order=-announced_date_first">ARXIV</a>
                     <a href="https://wombatty.itch.io/">GAMES</a>
                     <a href="https://linkedin.com/in/max-mcguinness/">LINKEDIN</a>
                 </div>
-                <div style="display: flex; gap: 2rem; margin-top: 0.5rem;">
+                <div class="contact-row">
                     <a href="mailto:max@max.rip">EMAIL</a>
                     <a href="https://x.com/maxgmcg">TWITTER</a>
                     <a href="https://aol.com">AOL</a>
@@ -361,7 +373,24 @@
             const terminal = document.getElementById('terminal');
             const promptLine = document.getElementById('term-prompt');
             const inputSpan = document.getElementById('term-input');
+            const introLines = Array.from(terminal.children);
             let inputBuffer = '';
+
+            // The CSS height fits the intro on desktop, but on narrow screens the
+            // intro wraps onto more lines and its top would be clipped. Grow the
+            // viewport to fit the intro and prompt (flex items keep their full
+            // height even when the terminal overflows, so this can be re-measured).
+            function fitTerminal() {
+                terminal.style.height = '';
+                let introHeight = 0;
+                for (const el of introLines) {
+                    introHeight += el.offsetHeight + parseFloat(getComputedStyle(el).marginBottom);
+                }
+                terminal.style.height = Math.max(terminal.clientHeight, Math.ceil(introHeight)) + 'px';
+            }
+            fitTerminal();
+            window.addEventListener('resize', fitTerminal);
+            if (document.fonts) document.fonts.ready.then(fitTerminal);
 
             // Fake filesystem: objects are directories, strings are files
             const fsRoot = {
